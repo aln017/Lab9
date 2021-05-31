@@ -1,72 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab 9</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lab 9</title>
 
-  <style>
-    button {
-      margin: 3px;
-    }
+    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <script>
+      window.TrackJS &&
+        TrackJS.install({
+          token: '0adf9bf52a2946b6932e28f8a4e8cf70',
+          // for more configuration options, see https://docs.trackjs.com
+        });
+    </script>
 
-    input[type="number"] {
-      width: 60px;
-    }
+    <style>
+      button {
+        margin: 3px;
+      }
 
-    output {
-      border: 1px solid gray;
-      display: block;
-      height: 18px;
-      margin-top: 5px;
-      padding: 5px;
-      width: 240px;
-    }
-  </style>
-</head>
-<body>
-  <fieldset>
-    <legend>Error Calculator</legend>
-    <input type="number" name="first-num" id="first-num" />
-    <select name="operator" id="operator">
-      <option>+</option>
-      <option>-</option>
-      <option>*</option>
-      <option>/</option>
-    </select>
-    <input type="number" name="second-num" id="second-num" />
-    <button id="calculate">Calculate</button>
-    <br />
-    <output></output>
-  </fieldset>
+      input[type='number'] {
+        width: 60px;
+      }
 
-  <section id="error-btns">
-    <button>Console Log Demo</button>
-    <button>Console Error Demo</button>
-    <button>Console Dir</button>
-    <button>Console dirxml</button>
-    <button>Console Group Start</button>
-    <button>Console Group End</button>
-    <button>Console Table</button>
-    <button>Start Timer</button>
-    <button>End Timer</button>
-    <button>Console Trace</button>
-    <button>Trigger a Global Error</button>
-  </section>
+      output {
+        border: 1px solid gray;
+        display: block;
+        height: 18px;
+        margin-top: 5px;
+        padding: 5px;
+        width: 240px;
+      }
+    </style>
+  </head>
+  <body>
+    <fieldset>
+      <legend>Error Calculator</legend>
+      <input type="number" name="first-num" id="first-num" />
+      <select name="operator" id="operator">
+        <option>+</option>
+        <option>-</option>
+        <option>*</option>
+        <option>/</option>
+      </select>
+      <input type="number" name="second-num" id="second-num" />
+      <!-- <button id="calculate">Calculate</button> -->
+      <br />
+      <output></output>
+    </fieldset>
 
-  <script>
-    let calculateBtn = document.querySelector('#calculate');
-    calculateBtn.addEventListener('click', () => {
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
-    });
+    <section id="error-btns">
+      <button onclick="conLog()">Console Log Demo</button>
+      <button onclick="conErr()">Console Error Demo</button>
+      <button onclick="conDir()">Console Dir</button>
+      <button onclick="conXML()">Console dirxml</button>
+      <button onclick="conGrStart()">Console Group Start</button>
+      <button onclick="conGrEnd()">Console Group End</button>
+      <button onclick="conTable()">Console Table</button>
+      <button onclick="startTime()">Start Timer</button>
+      <button onclick="endTime()">End Timer</button>
+      <button onclick="conTrace()">Console Trace</button>
+      <button onclick="globalErr()">Trigger a Global Error</button>
+    </section>
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-    // TODO - Make buttons functional
-  </script>
-</body>
+    <script>
+      try {
+        let buttonMsg = document.querySelector('calculate');
+        alert(buttonMsg.textContent);
+      } catch (err) {
+        alert('Calculate button does not exist!');
+      } finally {
+        alert('Creating new button...');
+        let a = document.querySelector('#second-num');
+        let newBut = document.createElement('button');
+        newBut.id = 'calculate';
+        newBut.textContent = 'Calculate';
+        a.after(newBut);
+      }
+
+      let calculateBtn = document.querySelector('#calculate');
+      calculateBtn.addEventListener('click', () => {
+        let output = document.querySelector('output');
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+        let operator = document.querySelector('#operator').value;
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      });
+
+      let errorBtns = Array.from(
+        document.querySelectorAll('#error-btns > button')
+      );
+
+      // TODO - Make buttons functional
+      let label = 'Log Group';
+      function conLog() {
+        console.log('Console Log Demo');
+      }
+      function conErr() {
+        console.error('Console Error Demo');
+      }
+      function conDir() {
+        console.dir(document.head);
+      }
+      function conXML() {
+        console.dirxml(document);
+      }
+      function conGrStart() {
+        console.group(label);
+      }
+      function conGrEnd() {
+        console.groupEnd(label);
+      }
+      function conTable() {
+        console.table([
+          {
+            name: 'Data Science in Practice',
+            class: 'COGS 108',
+          },
+          {
+            name: 'Components and Design Techniques for Digital Systems',
+            class: 'CSE 140',
+          },
+          {
+            name: 'Digital Systems Laboratory',
+            class: 'CSE 140L',
+          },
+          {
+            name: 'Statistical Methods',
+            class: 'MATH 183',
+          },
+        ]);
+      }
+      function startTime() {
+        console.time();
+      }
+      function endTime() {
+        console.timeEnd();
+      }
+      function conTrace() {
+        const first = () => {
+          second();
+        };
+        const second = () => {
+          third();
+        };
+        const third = () => {
+          console.trace();
+        };
+        first();
+      }
+      function globalErr() {
+        throw new Error('Uh oh, spaghettios.');
+      }
+
+      // Throwing and catching errors
+      class TypeError extends Error {
+        constructor(message) {
+          super(message); // (1)
+          this.name = 'TypeError'; // (2)
+        }
+      }
+
+      function func(item) {
+        if (typeof item != 'number') {
+          throw new TypeError('Value is not a number');
+        }
+      }
+
+      try {
+        func('bruh');
+      } catch (err) {
+        if (err instanceof TypeError) {
+          alert('Incorrect type: ' + err.message);
+        } else {
+          throw err;
+        }
+      }
+
+      window.onerror = function (msg, url, line, col, err) {
+        console.log(msg, url, line, col, err);
+      };
+
+      throw new Error('Uh oh.');
+      throw new Error('An error has occurred.');
+      TrackJS.track('Testing TrackJS!');
+    </script>
+  </body>
 </html>
